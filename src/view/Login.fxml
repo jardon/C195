@@ -56,18 +56,18 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label text="Username: " />
-                  <TextField />
+                  <TextField fx:id="usernameField" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label text="Password: " />
-                  <TextField />
+                  <TextField fx:id="passwordField" />
                </children>
             </HBox>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" text="Login" />
+                  <Button mnemonicParsing="false" onAction="#loginAction" text="Login" />
                </children>
             </HBox>
          </children>
