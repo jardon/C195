@@ -79,6 +79,8 @@ public class CustomerMenu implements Initializable {
                     cityChoiceBox.getValue(),
                     zipField.getText(),
                     phoneField.getText());
+
+        loadScene("Dashboard.fxml", event);
     }
 
     public void cancel(ActionEvent event) { loadScene("Dashboard.fxml", event); }
