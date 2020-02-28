@@ -12,10 +12,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.Connector;
+import model.User;
+
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -28,12 +29,7 @@ public class Login implements Initializable {
     Connection conn;
 
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            conn = DriverManager.getConnection("jdbc:mysql://3.227.166.251:3306/U07Ebi?profileSQL=true", "U07Ebi", "53689000795");
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
+        Connector.load();
     }
 
     private void loadScene(String destination, ActionEvent event) {
@@ -56,17 +52,12 @@ public class Login implements Initializable {
     }
 
     public void loginAction(ActionEvent event) {
-        try {
-            ResultSet loginData = conn.createStatement().executeQuery("select password from user where userName = '" + usernameField.getText() + "'");
-            loginData.next();
-            if(passwordField.getText().equals(loginData.getString("password")))
-                loadScene("Dashboard.fxml", event);
-            else
-                alertMe("Incorrect Login");
+        if(Connector.checkCreds(usernameField.getText(), passwordField.getText())) {
+            User.login(usernameField.getText(), true);
+            loadScene("Dashboard.fxml", event);
         }
-        catch (Exception e) {
-            System.out.println(e);
-        }
+        else
+            alertMe("Incorrect Login");
     }
 
 }
