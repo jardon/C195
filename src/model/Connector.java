@@ -109,24 +109,17 @@ public class Connector {
     }
 
     public static void deleteCustomer(Customer customer) {
-//        try {
-//            ResultSet ids = conn.createStatement().executeQuery("SELECT  \n" +
-//                    "customer.customerId,\n" +
-//                    "address.addressId,\n" +
-//                    "address.cityId,\n" +
-//                    "city.countryId,\n" +
-//                    "appointment.appointmentId\n" +
-//                    "FROM customer\n" +
-//                    "INNER JOIN address ON customer.addressId = address.addressId\n" +
-//                    "INNER JOIN city ON address.cityId = city.cityId\n" +
-//                    "INNER JOIN country ON city.countryID = country.countryId\n" +
-//                    "INNER JOIN appointment ON customer.customerId = appointment.customerId\n" +
-//                    "WHERE customer.customerId = 1");
-//            customerList.remove(customer);
-//        }
-//        catch(Exception e) {
-//            System.out.println(e);
-//        }
+        try {
+            conn.createStatement().executeUpdate(String.format(
+                    "DELETE customer FROM customer " +
+                    "INNER JOIN address ON customer.addressId = address.addressId " +
+                    "INNER JOIN appointment ON customer.customerId = appointment.customerId " +
+                    "WHERE customer.customerId = %s", customer.getCustomerId()));
+            customerList.remove(customer);
+        }
+        catch(Exception e) {
+            System.out.println(e);
+        }
     }
 
     public static void addAppointment(Appointment appointment) {
