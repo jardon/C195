@@ -55,7 +55,7 @@ public class Connector {
 
             ResultSet addressInfo = conn.createStatement().executeQuery(String.format(
                     "SELECT addressId FROM address WHERE " +
-                            "address = '%s' AND address2 = '%s' AND cityId = %s AND postalCode = '%s'" ,
+                    "address = '%s' AND address2 = '%s' AND cityId = %s AND postalCode = '%s'" ,
                     address1,
                     address2,
                     cityInfo.getString("cityId"),
@@ -86,7 +86,8 @@ public class Connector {
                     cityInfo.getString("cityId"),
                     customer.getZip()));
             addressInfo.next();
-            conn.createStatement().executeUpdate(String.format("UPDATE address " +
+            conn.createStatement().executeUpdate(String.format(
+                    "UPDATE address " +
                     "SET address='%s', address2='%s', cityId=%s,postalCode='%s',phone='%s',lastUpdate=CURDATE(),lastUpdateBy='%s' WHERE addressId=%s",
                     customer.getAddress1(),
                     customer.getAddress2(),
@@ -95,7 +96,8 @@ public class Connector {
                     customer.getPhone(),
                     User.getUsername(),
                     addressInfo.getString("addressId")));
-            conn.createStatement().executeUpdate(String.format("UPDATE customer " +
+            conn.createStatement().executeUpdate(String.format(
+                    "UPDATE customer " +
                     "SET customerName='%s', addressId=%s, lastUpdate=CURDATE(), lastUpdateBy='%s' WHERE customerId=%s",
                     customer.getCustomerName(),
                     addressInfo.getString("addressId"),
@@ -111,7 +113,7 @@ public class Connector {
     public static void deleteCustomer(Customer customer) {
         try {
             conn.createStatement().executeUpdate(String.format(
-                    "DELETE customer FROM customer " +
+                    "DELETE appointment, customer, address FROM customer " +
                     "INNER JOIN address ON customer.addressId = address.addressId " +
                     "INNER JOIN appointment ON customer.customerId = appointment.customerId " +
                     "WHERE customer.customerId = %s", customer.getCustomerId()));
@@ -149,10 +151,11 @@ public class Connector {
         return cityList;
     }
 
-    public static ObservableList<Customer> getCustomerList() {
+    public static void refreshCustomerList() {
         try {
             customerList.removeAll(customerList);
-            ResultSet customers = conn.createStatement().executeQuery("SELECT  \n" +
+            ResultSet customers = conn.createStatement().executeQuery(
+                    "SELECT  \n" +
                     "customer.customerId,\n" +
                     "customer.customerName,\n" +
                     "address.address,\n" +
@@ -179,7 +182,10 @@ public class Connector {
         catch (Exception e) {
             System.out.println(e);
         }
+    }
 
+    public static ObservableList<Customer> getCustomerList() {
+        refreshCustomerList();
         return customerList;
     }
 
