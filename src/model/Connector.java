@@ -25,7 +25,7 @@ public class Connector {
 
     public static boolean checkCreds(String username, String password) {
         try {
-            ResultSet loginData = conn.createStatement().executeQuery("select userName, userId, password, active from user where userName = '" + username + "'");
+            ResultSet loginData = conn.createStatement().executeQuery(String.format("select userName, userId, password, active from user where userName = '%s'", username));
             loginData.next();
             if(password.equals(loginData.getString("password")) && loginData.getInt("active") == 1)
                 return true;
@@ -39,37 +39,36 @@ public class Connector {
 
     public static void addCustomer(String name, String address1, String address2, String city, String zip, String phone) {
         try {
-            ResultSet cityInfo = conn.createStatement().executeQuery("SELECT cityId FROM city WHERE city = '" + city + "'");
+            ResultSet cityInfo = conn.createStatement().executeQuery(String.format("SELECT cityId FROM city WHERE city = '%s'",city));
             cityInfo.next();
-            conn.createStatement().executeUpdate("INSERT INTO address " +
-                    "(address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-                    "VALUES ('" +
-                    address1 + "','" +
-                    address2 + "'," +
-                    cityInfo.getString("cityId") + ",'" +
-                    zip + "','" +
-                    phone + "'," +
-                    "CURDATE(),'" +
-                    User.getUsername() + "'," +
-                    "CURDATE(),'" +
-                    User.getUsername() + "')");
-            ResultSet addressInfo = conn.createStatement().executeQuery("SELECT addressId FROM address WHERE " +
-                    "address = '" + address1 + "' " +
-                    "AND address2 = '" + address2 + "' " +
-                    "AND cityId = '" + cityInfo.getString("cityId") + "' " +
-                    "AND postalCode = '" + zip + "'");
-            addressInfo.next();
-            conn.createStatement().executeUpdate("INSERT INTO customer " +
-                    "(customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-                    "VALUES ('" +
-                    name + "'," +
-                    addressInfo.getString("addressId") + "," +
-                    "1," +
-                    "CURDATE(),'" +
-                    User.getUsername() + "'," +
-                    "CURDATE(),'" +
-                    User.getUsername() + "')");
 
+            conn.createStatement().executeUpdate(String.format(
+                    "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                    "VALUES ('%s','%s',%s,'%s','%s',CURDATE(),'%s',CURDATE(),'%s')",
+                    address1,
+                    address2,
+                    cityInfo.getString("cityId"),
+                    zip,
+                    phone,
+                    User.getUsername(),
+                    User.getUsername()));
+
+            ResultSet addressInfo = conn.createStatement().executeQuery(String.format(
+                    "SELECT addressId FROM address WHERE " +
+                            "address = '%s' AND address2 = '%s' AND cityId = %s AND postalCode = '%s'" ,
+                    address1,
+                    address2,
+                    cityInfo.getString("cityId"),
+                    zip));
+            addressInfo.next();
+
+            conn.createStatement().executeUpdate(String.format(
+                    "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                    "VALUES ('%s',%s,1,CURDATE(),'%s',CURDATE(),'%s')",
+                    name,
+                    addressInfo.getString("addressId"),
+                    User.getUsername(),
+                    User.getUsername()));
         }
         catch (Exception e) {
             System.out.println(e);
@@ -78,33 +77,30 @@ public class Connector {
 
     public static void updateCustomer(Customer customer) {
         try {
-            ResultSet cityInfo = conn.createStatement().executeQuery("SELECT cityId FROM city WHERE city = '" + customer.getCity() + "'");
+            ResultSet cityInfo = conn.createStatement().executeQuery(String.format("SELECT cityId FROM city WHERE city = '%s'", customer.getCity()));
             cityInfo.next();
-            ResultSet addressInfo = conn.createStatement().executeQuery("SELECT addressId FROM address WHERE " +
-                    "address = '" + customer.getAddress1() + "' " +
-                    "AND address2 = '" + customer.getAddress2() + "' " +
-                    "AND cityId = '" + cityInfo.getString("cityId") + "' " +
-                    "AND postalCode = '" + customer.getZip() + "'");
+            ResultSet addressInfo = conn.createStatement().executeQuery(String.format("SELECT addressId FROM address WHERE " +
+                    "address='%s' AND address2='%s' AND cityId=%s AND postalCode='%s'",
+                    customer.getAddress1(),
+                    customer.getAddress2(),
+                    cityInfo.getString("cityId"),
+                    customer.getZip()));
             addressInfo.next();
-            System.out.println();
-            conn.createStatement().executeUpdate("UPDATE address " +
-                    "SET " +
-                    "address='" + customer.getAddress1() +
-                    "', address2='" + customer.getAddress2() +
-                    "', cityId=" + cityInfo.getString("cityId") +
-                    ", postalCode='" + customer.getZip() +
-                    "', phone='" + customer.getPhone() +
-                    "', lastUpdate=CURDATE()" +
-                    ", lastUpdateBy='" +User.getUsername() +
-                    "' WHERE addressId=" +
-                    addressInfo.getString("addressId"));
-            conn.createStatement().executeUpdate("UPDATE customer " +
-                    "SET " +
-                    "customerName='" + customer.getCustomerName() +
-                    "', addressId=" + addressInfo.getString("addressId") +
-                    ", lastUpdate=CURDATE()" +
-                    ", lastUpdateBy='" + User.getUsername() +
-                    "' WHERE customerId=" + customer.getCustomerId());
+            conn.createStatement().executeUpdate(String.format("UPDATE address " +
+                    "SET address='%s', address2='%s', cityId=%s,postalCode='%s',phone='%s',lastUpdate=CURDATE(),lastUpdateBy='%s' WHERE addressId=%s",
+                    customer.getAddress1(),
+                    customer.getAddress2(),
+                    cityInfo.getString("cityId"),
+                    customer.getZip(),
+                    customer.getPhone(),
+                    User.getUsername(),
+                    addressInfo.getString("addressId")));
+            conn.createStatement().executeUpdate(String.format("UPDATE customer " +
+                    "SET customerName='%s', addressId=%s, lastUpdate=CURDATE(), lastUpdateBy='%s' WHERE customerId=%s",
+                    customer.getCustomerName(),
+                    addressInfo.getString("addressId"),
+                    User.getUsername(),
+                    customer.getCustomerId()));
 
         }
         catch (Exception e) {
