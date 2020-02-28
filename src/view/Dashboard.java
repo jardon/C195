@@ -96,7 +96,8 @@ public class Dashboard implements Initializable {
     public void addAppointment(ActionEvent event) { loadScene("AppointmentsMenu.fxml", event); }
 
     public void modifyAppointment(ActionEvent event) {
-        try {
+        if(!(appointmentsTable.getSelectionModel().getSelectedItem() == null)){
+            try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentsMenu.fxml"));
             Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 
@@ -107,13 +108,21 @@ public class Dashboard implements Initializable {
             controller.initData(appointmentsTable.getSelectionModel().getSelectedItem());
 
             stage.show();
+            }
+            catch (Exception e) {
+                System.out.println(e);
+            }
         }
-        catch (Exception e) {
-            System.out.println(e);
-        }
+        else
+            alertMe("No item selected.");
     }
 
-    public void deleteAppointment(ActionEvent event) { Connector.deleteAppointment(appointmentsTable.getSelectionModel().getSelectedItem()); }
+    public void deleteAppointment(ActionEvent event) {
+        if(!(appointmentsTable.getSelectionModel().getSelectedItem() == null))
+            Connector.deleteAppointment(appointmentsTable.getSelectionModel().getSelectedItem());
+        else
+            alertMe("No item selected.");
+    }
 
     public void exitApplication() {
         Optional<ButtonType> result = alertMe("Are you sure you want to exit?");
