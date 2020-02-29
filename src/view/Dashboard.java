@@ -124,8 +124,11 @@ public class Dashboard implements Initializable {
     }
 
     public void deleteAppointment(ActionEvent event) {
-        if(!(appointmentsTable.getSelectionModel().getSelectedItem() == null))
-            Connector.deleteAppointment(appointmentsTable.getSelectionModel().getSelectedItem());
+        if(!(appointmentsTable.getSelectionModel().getSelectedItem() == null)) {
+            Optional<ButtonType> result = alertMe("Are you sure you want to delete this appointment?");
+            if(result.get() == ButtonType.OK)
+                Connector.deleteAppointment(appointmentsTable.getSelectionModel().getSelectedItem());
+        }
         else
             alertMe("No item selected.");
     }

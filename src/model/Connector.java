@@ -176,7 +176,10 @@ public class Connector {
 
     public static void deleteAppointment(Appointment appointment) {
         try {
-            System.out.println(conn.createStatement().executeQuery("DESCRIBE appointment"));
+            conn.createStatement().executeUpdate(String.format(
+                    "DELETE FROM appointment\n" +
+                    "WHERE appointmentId=%s", appointment.getId()));
+            refreshAppointmentList();
         }
         catch(Exception e) {
             System.out.println(e);
