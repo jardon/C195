@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 public class Connector {
 
@@ -211,6 +212,15 @@ public class Connector {
         }
 
         return userList;
+    }
+
+    public static Customer getCustomer(int id) {
+        for(Customer customer : customerList) {
+            if(customer.getIntId() == id)
+                return customer;
+        }
+
+        throw new NoSuchElementException();
     }
 
     public static void refreshCustomerList() {

@@ -43,6 +43,7 @@ public class AppointmentsMenu implements Initializable {
         typeField.setText(appointment.getType());
         consultantChoiceBox.setValue(appointment.getUserName());
         this.appointment = appointment;
+        customerTable.getSelectionModel().select(Connector.getCustomer(appointment.getCustomerId()));
     }
 
     private void loadScene(String destination, ActionEvent event) {
