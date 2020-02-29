@@ -154,7 +154,21 @@ public class Connector {
     }
 
     public static void updateAppointment(Appointment appointment) {
-
+        try {
+            conn.createStatement().executeUpdate(String.format(
+                    "UPDATE appointment " +
+                    "SET customerId=%s, userId=%s, type='%s', start='%s', end='%s' " +
+                    "WHERE appointmentId=%s",
+                    appointment.getCustomerId(),
+                    appointment.getUserId(),
+                    appointment.getType(),
+                    LocalDateTime.now(),
+                    LocalDateTime.now(),
+                    appointment.getIdAsInt()));
+        }
+        catch (Exception e) {
+            System.out.println("Connector.updateAppointment: " + e);
+        }
     }
 
     public static void deleteAppointment(Appointment appointment) {

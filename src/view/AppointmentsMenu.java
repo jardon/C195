@@ -40,6 +40,9 @@ public class AppointmentsMenu implements Initializable {
 
     public void initData(Appointment appointment) {
         edited = true;
+        typeField.setText(appointment.getType());
+        consultantChoiceBox.setValue(appointment.getUserName());
+        this.appointment = appointment;
     }
 
     private void loadScene(String destination, ActionEvent event) {
