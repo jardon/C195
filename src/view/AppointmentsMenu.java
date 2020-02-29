@@ -1,35 +1,42 @@
 package view;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Appointment;
-
+import model.Connector;
+import model.Customer;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class AppointmentsMenu {
+public class AppointmentsMenu implements Initializable {
+
+    @FXML private TextField typeField;
+    @FXML private TableView<Customer> customerTable;
+    @FXML private TableColumn<Customer, String> customerId;
+    @FXML private TableColumn<Customer, String> customerName;
+    @FXML private DatePicker datePicker;
+    @FXML private ChoiceBox<String> choiceBox;
+
+    private boolean edited = false;
+    private Appointment appointment;
 
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://3.227.166.251:3306/U07Ebi?profileSQL=true", "U07Ebi", "53689000795");
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-
+        customerId.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerId"));
+        customerName.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerName"));
+        customerTable.setItems(Connector.getCustomerList());
     }
 
     public void initData(Appointment appointment) {
-
+        edited = true;
     }
 
     private void loadScene(String destination, ActionEvent event) {
@@ -52,7 +59,12 @@ public class AppointmentsMenu {
     }
 
     public void saveAppointment(ActionEvent event) {
+//        if(edited)
+//            Connector.updateAppointment(appointment);
+//        else
+//            Connector.addAppointment();
 
+        loadScene("Dashboard.fxml", event);
     }
 
     public void cancel(ActionEvent event) {
