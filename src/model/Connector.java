@@ -80,33 +80,32 @@ public class Connector {
 
     public static void updateCustomer(Customer customer) {
         try {
-            ResultSet cityInfo = conn.createStatement().executeQuery(String.format("SELECT cityId FROM city WHERE city = '%s'", customer.getCity()));
-            cityInfo.next();
-            ResultSet addressInfo = conn.createStatement().executeQuery(String.format(
-                    "SELECT addressId FROM address " +
-                    "WHERE address='%s' AND address2='%s' AND cityId=%s AND postalCode='%s'",
-                    customer.getAddress1(),
-                    customer.getAddress2(),
-                    cityInfo.getString("cityId"),
-                    customer.getZip()));
-            addressInfo.next();
+            ResultSet locationInfo = conn.createStatement().executeQuery(String.format(
+                    "SELECT\n" +
+                    "address.addressId,\n" +
+                    "city.cityId\n" +
+                    "FROM customer\n" +
+                    "INNER JOIN address ON customer.addressId = address.addressId\n" +
+                    "INNER JOIN city ON city.cityId = address.cityId\n" +
+                    "WHERE customerId = %s", customer.getIntId()));
+            locationInfo.next();
             conn.createStatement().executeUpdate(String.format(
                     "UPDATE address " +
                     "SET address='%s', address2='%s', cityId=%s,postalCode='%s',phone='%s',lastUpdate=CURDATE(),lastUpdateBy='%s' " +
                     "WHERE addressId=%s",
                     customer.getAddress1(),
                     customer.getAddress2(),
-                    cityInfo.getString("cityId"),
+                    locationInfo.getString("cityId"),
                     customer.getZip(),
                     customer.getPhone(),
                     User.getUsername(),
-                    addressInfo.getString("addressId")));
+                    locationInfo.getString("addressId")));
             conn.createStatement().executeUpdate(String.format(
                     "UPDATE customer " +
                     "SET customerName='%s', addressId=%s, lastUpdate=CURDATE(), lastUpdateBy='%s' " +
                     "WHERE customerId=%s",
                     customer.getCustomerName(),
-                    addressInfo.getString("addressId"),
+                    locationInfo.getString("addressId"),
                     User.getUsername(),
                     customer.getCustomerId()));
 
