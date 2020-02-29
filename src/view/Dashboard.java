@@ -28,6 +28,12 @@ public class Dashboard implements Initializable {
     @FXML private TableColumn<Customer, String> customerName;
     @FXML private TableColumn<Customer, String> customerPhone;
     @FXML private TableColumn<Customer, String> customerAddress;
+    @FXML private TableColumn<Appointment, String> appointmentName;
+    @FXML private TableColumn<Appointment, String> appointmentConsultant;
+    @FXML private TableColumn<Appointment, String> appointmentType;
+    @FXML private TableColumn<Appointment, String> appointmentDate;
+    @FXML private TableColumn<Appointment, String> appointmentTime;
+    @FXML private TableColumn<Appointment, String> appointmentLocation;
 
     public void initialize(URL url, ResourceBundle rb) {
         customerId.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerId"));
@@ -36,11 +42,13 @@ public class Dashboard implements Initializable {
         customerAddress.setCellValueFactory(new PropertyValueFactory<Customer, String>("address"));
         customerTable.setItems(Connector.getCustomerList());
 
-//        appointmentId.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerId"));
-//        appointmentName.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerName"));
-//        appointmentPhone.setCellValueFactory(new PropertyValueFactory<Customer, String>("phone"));
-//        appointmentAddress.setCellValueFactory(new PropertyValueFactory<Customer, String>("address"));
-//        appointmentsTable.setItems(Connector.getAppointmentList());
+        appointmentName.setCellValueFactory(new PropertyValueFactory<Appointment, String>("customer"));
+        appointmentConsultant.setCellValueFactory(new PropertyValueFactory<Appointment, String>("consultant"));
+        appointmentType.setCellValueFactory(new PropertyValueFactory<Appointment, String>("type"));
+        appointmentDate.setCellValueFactory(new PropertyValueFactory<Appointment, String>("date"));
+        appointmentTime.setCellValueFactory(new PropertyValueFactory<Appointment, String>("time"));
+        appointmentLocation.setCellValueFactory(new PropertyValueFactory<Appointment, String>("location"));
+        appointmentsTable.setItems(Connector.getAppointmentList());
     }
 
     private void loadScene(String destination, ActionEvent event) {
