@@ -2,6 +2,7 @@ package model;
 
 public class Appointment {
 
+    private int id;
     private String title;
     private String description;
     private String location;
@@ -9,7 +10,8 @@ public class Appointment {
     private String type;
     private String url;
 
-    public Appointment(String title, String description, String location, String contact, String type, String url) {
+    public Appointment(int id, String title, String description, String location, String contact, String type, String url) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
@@ -17,6 +19,10 @@ public class Appointment {
         this.type = type;
         this.url = url;
     }
+
+    public String getId() { return Integer.toString(id); }
+
+    public int getIdAsInt() { return id; }
 
     public String getTitle() { return title; }
 
