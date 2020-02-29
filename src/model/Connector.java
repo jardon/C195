@@ -27,7 +27,7 @@ public class Connector {
 
     public static int checkCreds(String username, String password) {
         try {
-            ResultSet loginData = conn.createStatement().executeQuery(String.format("select userName, userId, password, active from user where userName = '%s'", username));
+            ResultSet loginData = conn.createStatement().executeQuery(String.format("SELECT userName, userId, password, active FROM user WHERE userName = '%s'", username));
             loginData.next();
             if(password.equals(loginData.getString("password")) && loginData.getInt("active") == 1)
                 return Integer.parseInt(loginData.getString("userId"));
@@ -56,8 +56,8 @@ public class Connector {
                     User.getUsername()));
 
             ResultSet addressInfo = conn.createStatement().executeQuery(String.format(
-                    "SELECT addressId FROM address WHERE " +
-                    "address = '%s' AND address2 = '%s' AND cityId = %s AND postalCode = '%s'" ,
+                    "SELECT addressId FROM address " +
+                    "WHERE address = '%s' AND address2 = '%s' AND cityId = %s AND postalCode = '%s'" ,
                     address1,
                     address2,
                     cityInfo.getString("cityId"),
@@ -81,8 +81,9 @@ public class Connector {
         try {
             ResultSet cityInfo = conn.createStatement().executeQuery(String.format("SELECT cityId FROM city WHERE city = '%s'", customer.getCity()));
             cityInfo.next();
-            ResultSet addressInfo = conn.createStatement().executeQuery(String.format("SELECT addressId FROM address WHERE " +
-                    "address='%s' AND address2='%s' AND cityId=%s AND postalCode='%s'",
+            ResultSet addressInfo = conn.createStatement().executeQuery(String.format(
+                    "SELECT addressId FROM address " +
+                    "WHERE address='%s' AND address2='%s' AND cityId=%s AND postalCode='%s'",
                     customer.getAddress1(),
                     customer.getAddress2(),
                     cityInfo.getString("cityId"),
@@ -90,7 +91,8 @@ public class Connector {
             addressInfo.next();
             conn.createStatement().executeUpdate(String.format(
                     "UPDATE address " +
-                    "SET address='%s', address2='%s', cityId=%s,postalCode='%s',phone='%s',lastUpdate=CURDATE(),lastUpdateBy='%s' WHERE addressId=%s",
+                    "SET address='%s', address2='%s', cityId=%s,postalCode='%s',phone='%s',lastUpdate=CURDATE(),lastUpdateBy='%s' " +
+                    "WHERE addressId=%s",
                     customer.getAddress1(),
                     customer.getAddress2(),
                     cityInfo.getString("cityId"),
@@ -100,7 +102,8 @@ public class Connector {
                     addressInfo.getString("addressId")));
             conn.createStatement().executeUpdate(String.format(
                     "UPDATE customer " +
-                    "SET customerName='%s', addressId=%s, lastUpdate=CURDATE(), lastUpdateBy='%s' WHERE customerId=%s",
+                    "SET customerName='%s', addressId=%s, lastUpdate=CURDATE(), lastUpdateBy='%s' " +
+                    "WHERE customerId=%s",
                     customer.getCustomerName(),
                     addressInfo.getString("addressId"),
                     User.getUsername(),
