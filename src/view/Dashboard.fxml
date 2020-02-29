@@ -26,7 +26,6 @@
                                     <TableColumn fx:id="appointmentType" minWidth="0.0" prefWidth="135.0" text="Type" />
                                     <TableColumn fx:id="appointmentDate" prefWidth="150.0" text="Date" />
                                     <TableColumn fx:id="appointmentTime" prefWidth="197.0" text="Time" />
-                                    <TableColumn fx:id="appointmentLocation" prefWidth="437.0" text="Location" />
                                 </columns>
                               </TableView>
                               <Button layoutX="-1.0" layoutY="521.0" mnemonicParsing="false" onAction="#addAppointment" text="Add Appointment" />

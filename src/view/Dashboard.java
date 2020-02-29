@@ -33,7 +33,6 @@ public class Dashboard implements Initializable {
     @FXML private TableColumn<Appointment, String> appointmentType;
     @FXML private TableColumn<Appointment, String> appointmentDate;
     @FXML private TableColumn<Appointment, String> appointmentTime;
-    @FXML private TableColumn<Appointment, String> appointmentLocation;
 
     public void initialize(URL url, ResourceBundle rb) {
         customerId.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerId"));
@@ -43,11 +42,10 @@ public class Dashboard implements Initializable {
         customerTable.setItems(Connector.getCustomerList());
 
         appointmentName.setCellValueFactory(new PropertyValueFactory<Appointment, String>("customer"));
-        appointmentConsultant.setCellValueFactory(new PropertyValueFactory<Appointment, String>("consultant"));
+        appointmentConsultant.setCellValueFactory(new PropertyValueFactory<Appointment, String>("userName"));
         appointmentType.setCellValueFactory(new PropertyValueFactory<Appointment, String>("type"));
         appointmentDate.setCellValueFactory(new PropertyValueFactory<Appointment, String>("date"));
         appointmentTime.setCellValueFactory(new PropertyValueFactory<Appointment, String>("time"));
-        appointmentLocation.setCellValueFactory(new PropertyValueFactory<Appointment, String>("location"));
         appointmentsTable.setItems(Connector.getAppointmentList());
     }
 

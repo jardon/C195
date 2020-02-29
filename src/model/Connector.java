@@ -131,19 +131,19 @@ public class Connector {
 //                    "(customerId, userId, title, description, location, contact, type, url, start, end, createDate, createBy, lastUpdate, lastUpdateBy) " +
 //                    "VALUES (%s,%s,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
 //                    customerId,
-//                    User.getUserId(),
-//                    title,
-//                    description,
-//                    location,
-//                    contact,
+//                    appointment.get,
+//                    "not needed",
+//                    "not needed",
+//                    "not needed",
+//                    "not needed",
 //                    type,
-//                    url,
+//                    "not needed",
 //                    start,
 //                    end,
-//                    createDate,
-//                    createdBy
-//                    lastUpdate,
-//                    lastUpdateBy));
+//                    "CURDATE()",
+//                    User.getUsername(),
+//                    "CURDATE",
+//                    User.getUsername()));
         }
         catch (Exception e) {
             System.out.println(e);
@@ -222,25 +222,22 @@ public class Connector {
             ResultSet appointments = conn.createStatement().executeQuery(
                     "SELECT  \n" +
                     "customer.customerName,\n" +
+                    "user.userName,\n" +
                     "appointment.appointmentId,\n" +
-                    "appointment.title,\n" +
-                    "appointment.description,\n" +
-                    "appointment.location,\n" +
-                    "appointment.contact,\n" +
+                    "appointment.customerId,\n" +
+                    "appointment.userId,\n" +
                     "appointment.type,\n" +
-                    "appointment.url,\n" +
                     "appointment.start\n" +
                     "FROM customer\n" +
-                    "INNER JOIN appointment ON customer.customerId = appointment.customerId");
+                    "INNER JOIN appointment ON customer.customerId = appointment.customerId\n" +
+                    "INNER JOIN user ON user.userId = appointment.userId");
             while(appointments.next()) {
                 appointmentsList.add(new Appointment(appointments.getInt("appointmentId"),
                                 appointments.getString("customerName"),
-                                appointments.getString("title"),
-                                appointments.getString("description"),
-                                appointments.getString("location"),
-                                appointments.getString("contact"),
+                                appointments.getInt("customerId"),
+                                appointments.getString("userName"),
+                                appointments.getInt("userId"),
                                 appointments.getString("type"),
-                                appointments.getString("url"),
                                 "date",
                                 "time"));
             }

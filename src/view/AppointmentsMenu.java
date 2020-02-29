@@ -24,7 +24,8 @@ public class AppointmentsMenu implements Initializable {
     @FXML private TableColumn<Customer, String> customerId;
     @FXML private TableColumn<Customer, String> customerName;
     @FXML private DatePicker datePicker;
-    @FXML private ChoiceBox<String> choiceBox;
+    @FXML private ChoiceBox<String> timeChoiceBox;
+    @FXML private ChoiceBox<String> consultantChoiceBox;
 
     private boolean edited = false;
     private Appointment appointment;
