@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
 
 public class Connector {
 
@@ -125,26 +126,27 @@ public class Connector {
         }
     }
 
-    public static void addAppointment(Appointment appointment) {
+    public static void addAppointment(String customerId, String userName, String type, String start, String end) {
         try {
-//            conn.createStatement().executeUpdate(String.format(
-//                    "INSERT INTO appointment " +
-//                    "(customerId, userId, title, description, location, contact, type, url, start, end, createDate, createBy, lastUpdate, lastUpdateBy) " +
-//                    "VALUES (%s,%s,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
-//                    customerId,
-//                    appointment.get,
-//                    "not needed",
-//                    "not needed",
-//                    "not needed",
-//                    "not needed",
-//                    type,
-//                    "not needed",
-//                    start,
-//                    end,
-//                    "CURDATE()",
-//                    User.getUsername(),
-//                    "CURDATE",
-//                    User.getUsername()));
+            ResultSet userInfo = conn.createStatement().executeQuery(String.format("SELECT userId FROM user WHERE userName = '%s'", userName));
+            userInfo.next();
+            conn.createStatement().executeUpdate(String.format(
+                    "INSERT INTO appointment " +
+                    "(customerId, userId, title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdateBy) " +
+                    "VALUES (%s,%s,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+                    customerId,
+                    userInfo.getString("userId"),
+                    "not needed",
+                    "not needed",
+                    "not needed",
+                    "not needed",
+                    type,
+                    "not needed",
+                    LocalDateTime.now(),
+                    LocalDateTime.now(),
+                    LocalDateTime.now(),
+                    User.getUsername(),
+                    User.getUsername()));
         }
         catch (Exception e) {
             System.out.println(e);

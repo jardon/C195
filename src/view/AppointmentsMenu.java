@@ -62,10 +62,15 @@ public class AppointmentsMenu implements Initializable {
     }
 
     public void saveAppointment(ActionEvent event) {
-//        if(edited)
-//            Connector.updateAppointment(appointment);
-//        else
-//            Connector.addAppointment();
+        if(edited)
+            Connector.updateAppointment(appointment);
+        else
+            Connector.addAppointment(
+                    customerTable.getSelectionModel().getSelectedItem().getCustomerId(),
+                    consultantChoiceBox.getValue(),
+                    typeField.getText(),
+                    "start,",
+                    "end");
 
         loadScene("Dashboard.fxml", event);
     }
