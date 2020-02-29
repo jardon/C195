@@ -12,6 +12,7 @@ public class Connector {
     static ObservableList<Customer> customerList = FXCollections.observableArrayList();
     static ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
     static ObservableList<String> cityList = FXCollections.observableArrayList();
+    static ObservableList<String> userList = FXCollections.observableArrayList();
 
     public static void load() {
         try {
@@ -176,6 +177,21 @@ public class Connector {
         }
 
         return cityList;
+    }
+
+    public static ObservableList<String> getUserList() {
+        try {
+            userList.removeAll(userList);
+            ResultSet users = conn.createStatement().executeQuery("SELECT userName FROM user");
+            while (users.next()) {
+                userList.add(users.getString("userName"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return userList;
     }
 
     public static void refreshCustomerList() {

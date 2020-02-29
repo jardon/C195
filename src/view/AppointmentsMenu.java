@@ -34,6 +34,8 @@ public class AppointmentsMenu implements Initializable {
         customerId.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerId"));
         customerName.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerName"));
         customerTable.setItems(Connector.getCustomerList());
+
+        consultantChoiceBox.setItems(Connector.getUserList());
     }
 
     public void initData(Appointment appointment) {
