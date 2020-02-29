@@ -74,7 +74,7 @@ public class Connector {
                     addressInfo.getString("addressId"),
                     LocalDateTime.now(),
                     User.getUsername(),
-                    LocalDateTime.now().plusHours(1),
+                    LocalDateTime.now(),
                     User.getUsername()));
         }
         catch (Exception e) {
