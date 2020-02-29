@@ -118,11 +118,16 @@ public class Connector {
     public static void deleteCustomer(Customer customer) {
         try {
             conn.createStatement().executeUpdate(String.format(
-                    "DELETE appointment, customer, address FROM customer " +
-                    "INNER JOIN address ON customer.addressId = address.addressId " +
-                    "INNER JOIN appointment ON customer.customerId = appointment.customerId " +
+                    "DELETE appointment\n" +
+                    "FROM appointment\n" +
+                    "WHERE customerId=%s", customer.getIntId()));
+            conn.createStatement().executeUpdate(String.format(
+                    "DELETE customer, address\n" +
+                    "FROM customer\n" +
+                    "INNER JOIN address ON customer.addressId = address.addressId\n" +
+//                    "LEFT JOIN appointment ON customer.customerId = appointment.customerId\n" +
                     "WHERE customer.customerId = %s", customer.getCustomerId()));
-            customerList.remove(customer);
+            refreshCustomerList();
         }
         catch(Exception e) {
             System.out.println(e);
