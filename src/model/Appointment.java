@@ -42,6 +42,10 @@ public class Appointment {
 
     public void setId(int id) { this.id = id; }
 
+    public void setUserId(int userId) { this.userId = userId; }
+
+    public void setCustomerId(int customerId) { this.customerId = customerId; }
+
     public void setCustomer(String customer) { this.customer = customer; }
 
     public void setType(String type) { this.type = type; }

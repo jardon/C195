@@ -66,8 +66,12 @@ public class AppointmentsMenu implements Initializable {
     }
 
     public void saveAppointment(ActionEvent event) {
-        if(edited)
+        if(edited) {
+            appointment.setCustomerId(customerTable.getSelectionModel().getSelectedItem().getIntId());
+            appointment.setUserId(Connector.getUserId(consultantChoiceBox.getSelectionModel().getSelectedItem()));
+            appointment.setType(typeField.getText());
             Connector.updateAppointment(appointment);
+        }
         else
             Connector.addAppointment(
                     customerTable.getSelectionModel().getSelectedItem().getCustomerId(),

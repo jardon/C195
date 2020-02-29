@@ -222,6 +222,22 @@ public class Connector {
         throw new NoSuchElementException();
     }
 
+    public static int getUserId(String userName) {
+        try {
+            ResultSet users = conn.createStatement().executeQuery(String.format(
+                    "SELECT userId\n" +
+                    "FROM user\n" +
+                    "WHERE userName = '%s'", userName));
+            users.next();
+            return Integer.parseInt(users.getString("userId"));
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+
+        throw new NoSuchElementException();
+    }
+
     public static void refreshCustomerList() {
         try {
             customerList.removeAll(customerList);
