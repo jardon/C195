@@ -23,18 +23,18 @@ public class Connector {
         }
     }
 
-    public static boolean checkCreds(String username, String password) {
+    public static int checkCreds(String username, String password) {
         try {
             ResultSet loginData = conn.createStatement().executeQuery(String.format("select userName, userId, password, active from user where userName = '%s'", username));
             loginData.next();
             if(password.equals(loginData.getString("password")) && loginData.getInt("active") == 1)
-                return true;
+                return Integer.parseInt(loginData.getString("userId"));
         }
         catch (Exception e) {
             System.out.println(e);
         }
 
-        return false;
+        return -1;
     }
 
     public static void addCustomer(String name, String address1, String address2, String city, String zip, String phone) {
@@ -131,7 +131,7 @@ public class Connector {
 //                    "(customerId, userId, title, description, location, contact, type, url, start, end, createDate, createBy, lastUpdate, lastUpdateBy) " +
 //                    "VALUES (%s,%s,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
 //                    customerId,
-//                    userId,
+//                    User.getUserId(),
 //                    title,
 //                    description,
 //                    location,

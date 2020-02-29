@@ -52,8 +52,9 @@ public class Login implements Initializable {
     }
 
     public void loginAction(ActionEvent event) {
-        if(Connector.checkCreds(usernameField.getText(), passwordField.getText())) {
-            User.login(usernameField.getText(), true);
+        int uid = Connector.checkCreds(usernameField.getText(), passwordField.getText());
+        if(uid >= 0) {
+            User.login(usernameField.getText(), uid, true);
             loadScene("Dashboard.fxml", event);
         }
         else
