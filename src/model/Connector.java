@@ -125,7 +125,29 @@ public class Connector {
     }
 
     public static void addAppointment(Appointment appointment) {
-
+        try {
+//            conn.createStatement().executeUpdate(String.format(
+//                    "INSERT INTO appointment " +
+//                    "(customerId, userId, title, description, location, contact, type, url, start, end, createDate, createBy, lastUpdate, lastUpdateBy) " +
+//                    "VALUES (%s,%s,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+//                    customerId,
+//                    userId,
+//                    title,
+//                    description,
+//                    location,
+//                    contact,
+//                    type,
+//                    url,
+//                    start,
+//                    end,
+//                    createDate,
+//                    createdBy
+//                    lastUpdate,
+//                    lastUpdateBy));
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public static void updateAppointment(Appointment appointment) {
