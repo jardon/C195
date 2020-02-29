@@ -197,30 +197,31 @@ public class Connector {
     public static void refreshAppointmentList() {
         try {
             appointmentsList.removeAll(appointmentsList);
-//            ResultSet appointments = conn.createStatement().executeQuery(
-//                    "SELECT  \n" +
-//                            "customer.customerId,\n" +
-//                            "customer.customerName,\n" +
-//                            "address.address,\n" +
-//                            "address.address2,\n" +
-//                            "address.phone,\n" +
-//                            "address.postalCode,\n" +
-//                            "city.city,\n" +
-//                            "country.country\n" +
-//                            "FROM customer\n" +
-//                            "INNER JOIN address ON customer.addressId = address.addressId\n" +
-//                            "INNER JOIN city ON address.cityId = city.cityId\n" +
-//                            "INNER JOIN country ON city.countryID = country.countryId");
-//            while(appointments.next()) {
-//                appointmentsList.add(new Appointment(appointments.getInt("appointmentId"),
-//                        customers.getString("customerName"),
-//                        customers.getString("address"),
-//                        customers.getString("address2"),
-//                        customers.getString("phone"),
-//                        customers.getString("city"),
-//                        customers.getString("country"),
-//                        customers.getString("postalCode")));
-//            }
+            ResultSet appointments = conn.createStatement().executeQuery(
+                    "SELECT  \n" +
+                    "customer.customerName,\n" +
+                    "appointment.appointmentId,\n" +
+                    "appointment.title,\n" +
+                    "appointment.description,\n" +
+                    "appointment.location,\n" +
+                    "appointment.contact,\n" +
+                    "appointment.type,\n" +
+                    "appointment.url,\n" +
+                    "appointment.start\n" +
+                    "FROM customer\n" +
+                    "INNER JOIN appointment ON customer.customerId = appointment.customerId");
+            while(appointments.next()) {
+                appointmentsList.add(new Appointment(appointments.getInt("appointmentId"),
+                                appointments.getString("customerName"),
+                                appointments.getString("title"),
+                                appointments.getString("description"),
+                                appointments.getString("location"),
+                                appointments.getString("contact"),
+                                appointments.getString("type"),
+                                appointments.getString("url"),
+                                "date",
+                                "time"));
+            }
         }
         catch(Exception e) {
             System.out.println(e);
