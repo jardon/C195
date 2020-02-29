@@ -47,13 +47,15 @@ public class Connector {
 
             conn.createStatement().executeUpdate(String.format(
                     "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-                    "VALUES ('%s','%s',%s,'%s','%s',CURDATE(),'%s',CURDATE(),'%s')",
+                    "VALUES ('%s','%s',%s,'%s','%s','%s','%s','%s','%s')",
                     address1,
                     address2,
                     cityInfo.getString("cityId"),
                     zip,
                     phone,
+                    LocalDateTime.now(),
                     User.getUsername(),
+                    LocalDateTime.now(),
                     User.getUsername()));
 
             ResultSet addressInfo = conn.createStatement().executeQuery(String.format(
@@ -67,10 +69,12 @@ public class Connector {
 
             conn.createStatement().executeUpdate(String.format(
                     "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-                    "VALUES ('%s',%s,1,CURDATE(),'%s',CURDATE(),'%s')",
+                    "VALUES ('%s',%s,1,'%s','%s','%s','%s')",
                     name,
                     addressInfo.getString("addressId"),
+                    LocalDateTime.now(),
                     User.getUsername(),
+                    LocalDateTime.now().plusHours(1),
                     User.getUsername()));
         }
         catch (Exception e) {
@@ -91,21 +95,23 @@ public class Connector {
             locationInfo.next();
             conn.createStatement().executeUpdate(String.format(
                     "UPDATE address " +
-                    "SET address='%s', address2='%s', cityId=%s,postalCode='%s',phone='%s',lastUpdate=CURDATE(),lastUpdateBy='%s' " +
+                    "SET address='%s', address2='%s', cityId=%s,postalCode='%s',phone='%s',lastUpdate='%s',lastUpdateBy='%s' " +
                     "WHERE addressId=%s",
                     customer.getAddress1(),
                     customer.getAddress2(),
                     locationInfo.getString("cityId"),
                     customer.getZip(),
                     customer.getPhone(),
+                    LocalDateTime.now(),
                     User.getUsername(),
                     locationInfo.getString("addressId")));
             conn.createStatement().executeUpdate(String.format(
                     "UPDATE customer " +
-                    "SET customerName='%s', addressId=%s, lastUpdate=CURDATE(), lastUpdateBy='%s' " +
+                    "SET customerName='%s', addressId=%s, lastUpdate='%s', lastUpdateBy='%s' " +
                     "WHERE customerId=%s",
                     customer.getCustomerName(),
                     locationInfo.getString("addressId"),
+                    LocalDateTime.now(),
                     User.getUsername(),
                     customer.getCustomerId()));
 
