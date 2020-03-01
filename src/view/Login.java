@@ -12,8 +12,12 @@ import javafx.stage.Stage;
 import model.Connector;
 import model.User;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.net.URL;
 import java.sql.Connection;
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -63,6 +67,15 @@ public class Login implements Initializable {
         int uid = Connector.checkCreds(usernameField.getText(), passwordField.getText());
         if(uid >= 0) {
             User.login(usernameField.getText(), uid, true);
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter("logins.txt", true));
+                writer.write(String.format("[%s] user %s logged in", LocalDateTime.now().toString(), User.getUsername()));
+                writer.close();
+            }
+            catch (Exception e) {
+            System.out.println("Login.loginAction: " + e);
+            }
+
             loadScene("Dashboard.fxml", event);
         }
         else
