@@ -46,7 +46,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label text="Please Log in">
+                  <Label fx:id="loginMessage" text="Please Log in">
                      <font>
                         <Font size="26.0" />
                      </font>
@@ -55,19 +55,19 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label text="Username: " />
+                  <Label fx:id="username" text="Username: " />
                   <TextField fx:id="usernameField" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label text="Password: " />
+                  <Label fx:id="password" text="Password: " />
                   <TextField fx:id="passwordField" />
                </children>
             </HBox>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#loginAction" text="Login" />
+                  <Button fx:id="login" mnemonicParsing="false" onAction="#loginAction" text="Login" />
                </children>
             </HBox>
          </children>

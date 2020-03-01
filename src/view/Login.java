@@ -6,10 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Connector;
@@ -17,6 +14,7 @@ import model.User;
 
 import java.net.URL;
 import java.sql.Connection;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -24,12 +22,22 @@ public class Login implements Initializable {
 
     @FXML private Label username;
     @FXML private Label password;
+    @FXML private Label loginMessage;
     @FXML private TextField usernameField;
     @FXML private TextField passwordField;
-    Connection conn;
+    @FXML private Button login;
+    private String error;
 
     public void initialize(URL url, ResourceBundle rb) {
+
         Connector.load();
+        Locale locale = Locale.getDefault();
+        rb = ResourceBundle.getBundle("localization/login", locale);
+        username.setText(rb.getString("username") + ": ");
+        password.setText(rb.getString("password") + ": ");
+        login.setText(rb.getString("login"));
+        loginMessage.setText(rb.getString("loginMessage"));
+        error = rb.getString("error");
     }
 
     private void loadScene(String destination, ActionEvent event) {
@@ -58,7 +66,7 @@ public class Login implements Initializable {
             loadScene("Dashboard.fxml", event);
         }
         else
-            alertMe("Incorrect Login");
+            alertMe(error);
     }
 
 }
