@@ -2,6 +2,8 @@ package model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.DatePicker;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -176,7 +178,7 @@ public class Connector {
                     appointment.getCustomerId(),
                     appointment.getUserId(),
                     appointment.getType(),
-                    LocalDateTime.now(),
+                    appointment.getStart(),
                     LocalDateTime.now(),
                     appointment.getIdAsInt()));
         }
@@ -301,7 +303,8 @@ public class Connector {
                     "appointment.customerId,\n" +
                     "appointment.userId,\n" +
                     "appointment.type,\n" +
-                    "appointment.start\n" +
+                    "appointment.start,\n" +
+                    "appointment.end\n" +
                     "FROM customer\n" +
                     "INNER JOIN appointment ON customer.customerId = appointment.customerId\n" +
                     "INNER JOIN user ON user.userId = appointment.userId");
@@ -312,12 +315,12 @@ public class Connector {
                                 appointments.getString("userName"),
                                 appointments.getInt("userId"),
                                 appointments.getString("type"),
-                                "date",
-                                "time"));
+                                appointments.getString("start"),
+                                appointments.getString("end")));
             }
         }
         catch(Exception e) {
-            System.out.println(e);
+            System.out.println("Connector.refreshAppointmentList: " + e);
         }
     }
 

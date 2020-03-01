@@ -24,8 +24,8 @@
                                   <TableColumn fx:id="appointmentName" prefWidth="137.0" text="Customer Name" />
                                   <TableColumn fx:id="appointmentConsultant" prefWidth="143.0" text="Consultant" />
                                     <TableColumn fx:id="appointmentType" minWidth="0.0" prefWidth="135.0" text="Type" />
-                                    <TableColumn fx:id="appointmentDate" prefWidth="150.0" text="Date" />
-                                    <TableColumn fx:id="appointmentTime" prefWidth="197.0" text="Time" />
+                                    <TableColumn fx:id="appointmentStart" prefWidth="150.0" text="Start" />
+                                    <TableColumn fx:id="appointmentEnd" prefWidth="197.0" text="End" />
                                 </columns>
                               </TableView>
                               <Button layoutX="-1.0" layoutY="521.0" mnemonicParsing="false" onAction="#addAppointment" text="Add Appointment" />

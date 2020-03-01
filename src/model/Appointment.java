@@ -7,19 +7,19 @@ public class Appointment {
     private int customerId;
     private int userId;
     private String type;
-    private String date;
-    private String time;
     private String userName;
+    private String start;
+    private String end;
 
-    public Appointment(int id, String customer, int customerId, String userName, int userId, String type, String date, String time) {
+    public Appointment(int id, String customer, int customerId, String userName, int userId, String type, String start, String end) {
         this.id = id;
         this.customer = customer;
         this.customerId = customerId;
         this.userName = userName;
         this.userId = userId;
         this.type = type;
-        this.date = date;
-        this.time = time;
+        this.start = start;
+        this.end = end;
     }
 
     public String getId() { return Integer.toString(id); }
@@ -36,9 +36,9 @@ public class Appointment {
 
     public String getType() { return type; }
 
-    public String getDate() { return date; }
+    public String getStart() { return start; }
 
-    public String getTime() { return time; }
+    public String getEnd() { return end; }
 
     public void setId(int id) { this.id = id; }
 
@@ -50,7 +50,7 @@ public class Appointment {
 
     public void setType(String type) { this.type = type; }
 
-    public void setDate(String date) { this.date = date; }
+    public void setStart(String start) { this.start = start; }
 
-    public void setTime(String time) { this.time = time; }
+    public void setEnd(String end) { this.end = end; }
 }

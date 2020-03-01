@@ -31,8 +31,8 @@ public class Dashboard implements Initializable {
     @FXML private TableColumn<Appointment, String> appointmentName;
     @FXML private TableColumn<Appointment, String> appointmentConsultant;
     @FXML private TableColumn<Appointment, String> appointmentType;
-    @FXML private TableColumn<Appointment, String> appointmentDate;
-    @FXML private TableColumn<Appointment, String> appointmentTime;
+    @FXML private TableColumn<Appointment, String> appointmentStart;
+    @FXML private TableColumn<Appointment, String> appointmentEnd;
 
     public void initialize(URL url, ResourceBundle rb) {
         customerId.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerId"));
@@ -44,8 +44,8 @@ public class Dashboard implements Initializable {
         appointmentName.setCellValueFactory(new PropertyValueFactory<Appointment, String>("customer"));
         appointmentConsultant.setCellValueFactory(new PropertyValueFactory<Appointment, String>("userName"));
         appointmentType.setCellValueFactory(new PropertyValueFactory<Appointment, String>("type"));
-        appointmentDate.setCellValueFactory(new PropertyValueFactory<Appointment, String>("date"));
-        appointmentTime.setCellValueFactory(new PropertyValueFactory<Appointment, String>("time"));
+        appointmentStart.setCellValueFactory(new PropertyValueFactory<Appointment, String>("start"));
+        appointmentEnd.setCellValueFactory(new PropertyValueFactory<Appointment, String>("end"));
         appointmentsTable.setItems(Connector.getAppointmentList());
     }
 

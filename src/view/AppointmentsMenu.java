@@ -1,5 +1,7 @@
 package view;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,7 @@ import model.Appointment;
 import model.Connector;
 import model.Customer;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -26,6 +29,7 @@ public class AppointmentsMenu implements Initializable {
     @FXML private DatePicker datePicker;
     @FXML private ChoiceBox<String> timeChoiceBox;
     @FXML private ChoiceBox<String> consultantChoiceBox;
+    private ObservableList<String> timeSlots = FXCollections.observableArrayList();
 
     private boolean edited = false;
     private Appointment appointment;
@@ -34,8 +38,17 @@ public class AppointmentsMenu implements Initializable {
         customerId.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerId"));
         customerName.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerName"));
         customerTable.setItems(Connector.getCustomerList());
-
         consultantChoiceBox.setItems(Connector.getUserList());
+
+        for(int i = 7; i < 18; i++) {
+            String time;
+            if(i < 10)
+                time = "0" + i;
+            else
+                time = Integer.toString(i);
+            timeSlots.add(time + ":00:00");
+        }
+        timeChoiceBox.setItems(timeSlots);
     }
 
     public void initData(Appointment appointment) {
@@ -44,6 +57,7 @@ public class AppointmentsMenu implements Initializable {
         consultantChoiceBox.setValue(appointment.getUserName());
         this.appointment = appointment;
         customerTable.getSelectionModel().select(Connector.getCustomer(appointment.getCustomerId()));
+//        datePicker.setValue(appointment.getTime());
     }
 
     private void loadScene(String destination, ActionEvent event) {
@@ -66,10 +80,13 @@ public class AppointmentsMenu implements Initializable {
     }
 
     public void saveAppointment(ActionEvent event) {
+        String time = String.format("%s %s", datePicker.getValue(), timeChoiceBox.getValue());
+        System.out.println(time);
         if(edited) {
             appointment.setCustomerId(customerTable.getSelectionModel().getSelectedItem().getIntId());
             appointment.setUserId(Connector.getUserId(consultantChoiceBox.getSelectionModel().getSelectedItem()));
             appointment.setType(typeField.getText());
+            appointment.setStart(time);
             Connector.updateAppointment(appointment);
         }
         else
@@ -77,7 +94,7 @@ public class AppointmentsMenu implements Initializable {
                     customerTable.getSelectionModel().getSelectedItem().getCustomerId(),
                     consultantChoiceBox.getValue(),
                     typeField.getText(),
-                    "start,",
+                    time,
                     "end");
 
         loadScene("Dashboard.fxml", event);
