@@ -11,12 +11,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Connector;
 import model.User;
-
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.net.URL;
-import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Optional;
@@ -35,8 +32,7 @@ public class Login implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         Connector.load();
-        Locale locale = Locale.getDefault();
-        rb = ResourceBundle.getBundle("localization/login", locale);
+        rb = ResourceBundle.getBundle("localization/login", Locale.getDefault());
         username.setText(rb.getString("username") + ": ");
         password.setText(rb.getString("password") + ": ");
         login.setText(rb.getString("login"));
