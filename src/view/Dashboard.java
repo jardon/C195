@@ -50,6 +50,7 @@ public class Dashboard implements Initializable {
     private ObservableList<String> reportTypeList = FXCollections.observableArrayList();
     private List<String> reportList = Stream.of("Appointment Types", "Schedule by Consultant","Days by Load").collect(Collectors.toList());
     private List<String> rangeList = Stream.of("30", "7").collect(Collectors.toList());
+    private ObservableList<String> users = Connector.getUserList();
 
 
     public void initialize(URL url, ResourceBundle rb) {
@@ -78,7 +79,7 @@ public class Dashboard implements Initializable {
 
         reportList.forEach(report -> reportTypeList.add(report)); //Lambda function for adding reports to the type list
         reportType.setItems(reportTypeList);
-        reportType.setValue("Appointment Types");
+        reportType.getSelectionModel().selectFirst();
 
         reportType.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -107,12 +108,12 @@ public class Dashboard implements Initializable {
             }
         });
 
-        consultant.setItems(Connector.getUserList());
-        consultant.setValue(Connector.getUserList().get(0));
+        consultant.setItems(users);
+        consultant.getSelectionModel().selectFirst();
         consultant.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                Connector.reportListToConsultant(Connector.getUserList().get(t1.intValue()));
+                Connector.reportListToConsultant(users.get(t1.intValue()));
             }
         });
 
