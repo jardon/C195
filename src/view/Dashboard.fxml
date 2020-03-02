@@ -70,12 +70,19 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView prefHeight="500.0" prefWidth="1200.0">
+                              <TableView fx:id="reportTable" prefHeight="500.0" prefWidth="1200.0">
                                  <columns>
-                                    <TableColumn prefWidth="75.0" text="C1" />
-                                    <TableColumn prefWidth="75.0" text="C2" />
+                                    <TableColumn fx:id="column1" prefWidth="400.0" text="C1" />
+                                    <TableColumn fx:id="column2" prefWidth="400.0" text="Column X" />
+                                    <TableColumn fx:id="column3" prefWidth="400.0" text="Column X" />
                                  </columns>
                               </TableView>
+                              <ButtonBar layoutX="-2.0" layoutY="502.0" prefHeight="69.0" prefWidth="1200.0">
+                                 <buttons>
+                                    <ChoiceBox fx:id="consultant" prefWidth="150.0" />
+                                    <ChoiceBox fx:id="reportType" prefWidth="150.0" />
+                                 </buttons>
+                              </ButtonBar>
                            </children>
                         </AnchorPane>
                     </content>

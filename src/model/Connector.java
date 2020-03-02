@@ -16,6 +16,7 @@ public class Connector {
     static ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
     static ObservableList<String> cityList = FXCollections.observableArrayList();
     static ObservableList<String> userList = FXCollections.observableArrayList();
+    static ObservableList<Report> reportList = FXCollections.observableArrayList();
     static int range = 30;
 
     public static void load() {
@@ -356,5 +357,72 @@ public class Connector {
             System.out.println("Connector.appointmentReminder: " + e);
         }
         return false;
+    }
+
+    public static ObservableList<Report> getReportList() { return reportList; }
+
+    public static void reportListToAppointmentTypes() {
+        reportList.removeAll(reportList);
+        try {
+            ResultSet appointments = conn.createStatement().executeQuery(String.format(
+                    "SELECT type, COUNT(*) count, MONTH(start) month " +
+                    "FROM appointment " +
+                    "GROUP BY type HAVING count > 0 " +
+                    "ORDER BY month"));
+            while(appointments.next()) {
+                reportList.add(new Report(
+                        appointments.getString("month"),
+                        appointments.getString("type"),
+                        appointments.getString("count")));
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Connector.reportListToAppointmentTypes: " + e);
+        }
+    }
+
+    public static void reportListToConsultant(String consultant) {
+        reportList.removeAll(reportList);
+        try {
+            ResultSet appointments = conn.createStatement().executeQuery(String.format(
+                    "SELECT \n" +
+                    "customer.customerName,\n" +
+                    "appointment.type,\n" +
+                    "appointment.start\n" +
+                    "FROM appointment\n" +
+                    "INNER JOIN user ON appointment.userId = user.userId\n" +
+                    "INNER JOIN customer ON appointment.customerId = customer.customerId\n" +
+                    "WHERE userName = '%s'",
+                    consultant));
+            while(appointments.next()) {
+                reportList.add(new Report(
+                        appointments.getString("customerName"),
+                        appointments.getString("type"),
+                        appointments.getString("start")));
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Connector.reportListToConsultant: " + e);
+        }
+    }
+
+    public static void reportListToLoad() {
+        reportList.removeAll(reportList);
+        try {
+            ResultSet appointments = conn.createStatement().executeQuery(
+                    "SELECT DAYOFWEEK(start) day, COUNT(*) count\n" +
+                    "FROM appointment\n" +
+                    "GROUP BY day HAVING count > 0\n" +
+                    "ORDER BY count DESC");
+            while(appointments.next()) {
+                reportList.add(new Report(
+                appointments.getString("day"),
+                appointments.getString("count"),
+                "N/A"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Connector.reportListToLoad: " + e);
+        }
     }
 }

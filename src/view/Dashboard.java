@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 import model.Appointment;
 import model.Connector;
 import model.Customer;
+import model.Report;
+
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -35,7 +37,14 @@ public class Dashboard implements Initializable {
     @FXML private TableColumn<Appointment, String> appointmentStart;
     @FXML private TableColumn<Appointment, String> appointmentEnd;
     @FXML private ChoiceBox<String> range;
+    @FXML private TableView<Report> reportTable;
+    @FXML private TableColumn<Report, String> column1;
+    @FXML private TableColumn<Report, String> column2;
+    @FXML private TableColumn<Report, String> column3;
+    @FXML private ChoiceBox<String> reportType;
+    @FXML private ChoiceBox<String> consultant;
     private ObservableList<String> rangeItems = FXCollections.observableArrayList();
+    private ObservableList<String> reportTypeList = FXCollections.observableArrayList();
 
     public void initialize(URL url, ResourceBundle rb) {
         customerId.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerId"));
@@ -50,6 +59,58 @@ public class Dashboard implements Initializable {
         appointmentStart.setCellValueFactory(new PropertyValueFactory<Appointment, String>("zonedStart"));
         appointmentEnd.setCellValueFactory(new PropertyValueFactory<Appointment, String>("zonedEnd"));
         appointmentsTable.setItems(Connector.getAppointmentList());
+
+        column1.setCellValueFactory(new PropertyValueFactory<Report, String>("column1"));
+        column2.setCellValueFactory(new PropertyValueFactory<Report, String>("column2"));
+        column3.setCellValueFactory(new PropertyValueFactory<Report, String>("column3"));
+        Connector.reportListToAppointmentTypes();
+        consultant.setDisable(true);
+        column1.setText("Month");
+        column2.setText("Type");
+        column3.setText("Count");
+        reportTable.setItems(Connector.getReportList());
+
+        reportTypeList.add("Appointment Types");
+        reportTypeList.add("Schedule by Consultant");
+        reportTypeList.add("Days by Load");
+        reportType.setItems(reportTypeList);
+        reportType.setValue("Appointment Types");
+
+        reportType.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if(t1.intValue() == 1) {
+                    consultant.setDisable(false);
+                    Connector.reportListToConsultant(consultant.getValue());
+                    column1.setText("Customer Name");
+                    column2.setText("Type");
+                    column3.setText("Start");
+                }
+                else if(t1.intValue() == 2) {
+                    consultant.setDisable(true);
+                    Connector.reportListToLoad();
+                    column1.setText("Day of Week");
+                    column2.setText("Number of Appointments");
+                    column3.setText("N/A");
+                }
+                else if(t1.intValue() == 0) {
+                    consultant.setDisable(true);
+                    Connector.reportListToAppointmentTypes();
+                    column1.setText("Month");
+                    column2.setText("Type");
+                    column3.setText("Count");
+                }
+            }
+        });
+
+        consultant.setItems(Connector.getUserList());
+        consultant.setValue(Connector.getUserList().get(0));
+        consultant.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                Connector.reportListToConsultant(Connector.getUserList().get(t1.intValue()));
+            }
+        });
 
         rangeItems.add("30");
         rangeItems.add("7");
