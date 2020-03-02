@@ -25,7 +25,7 @@ public class Login implements Initializable {
     @FXML private Label password;
     @FXML private Label loginMessage;
     @FXML private TextField usernameField;
-    @FXML private TextField passwordField;
+    @FXML private PasswordField passwordField;
     @FXML private Button login;
     private String error;
 
