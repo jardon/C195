@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class Appointment {
 
@@ -59,4 +60,8 @@ public class Appointment {
     public void setStart(LocalDateTime start) { this.start = start; }
 
     public void setEnd(LocalDateTime end) { this.end = end; }
+
+    public String getZonedStart() { return start.atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime().toString(); }
+
+    public String getZonedEnd() { return end.atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime().toString(); }
 }

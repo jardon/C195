@@ -47,8 +47,8 @@ public class Dashboard implements Initializable {
         appointmentName.setCellValueFactory(new PropertyValueFactory<Appointment, String>("customer"));
         appointmentConsultant.setCellValueFactory(new PropertyValueFactory<Appointment, String>("userName"));
         appointmentType.setCellValueFactory(new PropertyValueFactory<Appointment, String>("type"));
-        appointmentStart.setCellValueFactory(new PropertyValueFactory<Appointment, String>("start"));
-        appointmentEnd.setCellValueFactory(new PropertyValueFactory<Appointment, String>("end"));
+        appointmentStart.setCellValueFactory(new PropertyValueFactory<Appointment, String>("zonedStart"));
+        appointmentEnd.setCellValueFactory(new PropertyValueFactory<Appointment, String>("zonedEnd"));
         appointmentsTable.setItems(Connector.getAppointmentList());
 
         rangeItems.add("30");
