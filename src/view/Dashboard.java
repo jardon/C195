@@ -20,8 +20,11 @@ import model.Customer;
 import model.Report;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Dashboard implements Initializable {
 
@@ -45,6 +48,9 @@ public class Dashboard implements Initializable {
     @FXML private ChoiceBox<String> consultant;
     private ObservableList<String> rangeItems = FXCollections.observableArrayList();
     private ObservableList<String> reportTypeList = FXCollections.observableArrayList();
+    private List<String> reportList = Stream.of("Appointment Types", "Schedule by Consultant","Days by Load").collect(Collectors.toList());
+    private List<String> rangeList = Stream.of("30", "7").collect(Collectors.toList());
+
 
     public void initialize(URL url, ResourceBundle rb) {
         customerId.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerId"));
@@ -70,9 +76,7 @@ public class Dashboard implements Initializable {
         column3.setText("Count");
         reportTable.setItems(Connector.getReportList());
 
-        reportTypeList.add("Appointment Types");
-        reportTypeList.add("Schedule by Consultant");
-        reportTypeList.add("Days by Load");
+        reportList.forEach(report -> reportTypeList.add(report)); //Lambda function for adding reports to the type list
         reportType.setItems(reportTypeList);
         reportType.setValue("Appointment Types");
 
@@ -112,8 +116,7 @@ public class Dashboard implements Initializable {
             }
         });
 
-        rangeItems.add("30");
-        rangeItems.add("7");
+        rangeList.forEach(range -> rangeItems.add(range)); //Lambda to simplify adding new range options
         range.setItems(rangeItems);
         range.setValue("30");
         range.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
