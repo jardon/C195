@@ -65,6 +65,8 @@ public class Dashboard implements Initializable {
                 Connector.refreshAppointmentList();
             }
         });
+        if(Connector.appointmentReminder())
+            alertMe("Upcoming Appointment Reminder!");
     }
 
     private void loadScene(String destination, ActionEvent event) {

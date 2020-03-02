@@ -335,4 +335,27 @@ public class Connector {
     }
 
     public static void setRange(int newRange) { range = newRange; }
+
+    public static boolean appointmentReminder() {
+        try {
+            ResultSet appointments = conn.createStatement().executeQuery(String.format(
+                    "SELECT  \n" +
+                    "customer.customerName\n" +
+                    "FROM customer\n" +
+                    "INNER JOIN appointment ON customer.customerId = appointment.customerId\n" +
+                    "INNER JOIN user ON user.userId = appointment.userId\n" +
+                    "WHERE appointment.userId = %s AND appointment.start between '%s' AND '%s'",
+                    User.getUserId(),
+                    LocalDateTime.now(),
+                    LocalDateTime.now().plusMinutes(15)));
+            appointments.next();
+            return true;
+        }
+        catch (Exception e) {
+            System.out.println("Connector.appointmentReminder: " + e);
+            if(e instanceof NullPointerException)
+                return false;
+        }
+        return false;
+    }
 }
