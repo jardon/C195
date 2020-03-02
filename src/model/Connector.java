@@ -349,12 +349,11 @@ public class Connector {
                     LocalDateTime.now(),
                     LocalDateTime.now().plusMinutes(15)));
             appointments.next();
+            appointments.getString("customerName");
             return true;
         }
         catch (Exception e) {
             System.out.println("Connector.appointmentReminder: " + e);
-            if(e instanceof NullPointerException)
-                return false;
         }
         return false;
     }
