@@ -16,6 +16,7 @@ import model.Appointment;
 import model.Connector;
 import model.Customer;
 import java.net.URL;
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -57,6 +58,15 @@ public class AppointmentsMenu implements Initializable {
             timeSlots.add(time + ":45:00");
         }
         timeChoiceBox.setItems(timeSlots);
+
+        datePicker.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.compareTo(LocalDate.now()) < 0 );
+                if(date.getDayOfWeek() == DayOfWeek.SUNDAY || date.getDayOfWeek() == DayOfWeek.SATURDAY)
+                    setDisable(true);
+            }
+        });
     }
 
     public void initData(Appointment appointment) {
