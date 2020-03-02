@@ -16,6 +16,8 @@ import model.Appointment;
 import model.Connector;
 import model.Customer;
 import java.net.URL;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -30,6 +32,7 @@ public class AppointmentsMenu implements Initializable {
     @FXML private DatePicker datePicker;
     @FXML private ChoiceBox<String> timeChoiceBox;
     @FXML private ChoiceBox<String> consultantChoiceBox;
+    @FXML private Spinner<Integer> duration;
     private ObservableList<String> timeSlots = FXCollections.observableArrayList();
 
     private boolean edited = false;
@@ -40,6 +43,7 @@ public class AppointmentsMenu implements Initializable {
         customerName.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerName"));
         customerTable.setItems(Connector.getCustomerList());
         consultantChoiceBox.setItems(Connector.getUserList());
+        duration.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,4,1));
 
         for(int i = 7; i < 18; i++) {
             String time;
@@ -56,12 +60,15 @@ public class AppointmentsMenu implements Initializable {
     }
 
     public void initData(Appointment appointment) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         edited = true;
         typeField.setText(appointment.getType());
         consultantChoiceBox.setValue(appointment.getUserName());
         this.appointment = appointment;
         customerTable.getSelectionModel().select(Connector.getCustomer(appointment.getCustomerId()));
-//        datePicker.setValue(appointment.getTime());
+        duration.getValueFactory().setValue(Duration.between(appointment.getStart(), appointment.getEnd()).toHoursPart());
+        timeChoiceBox.setValue(appointment.getStartAsString().substring(11) + ":00");
+        datePicker.setValue(LocalDate.parse(appointment.getStartAsString().substring(0,10), formatter));
     }
 
     private void loadScene(String destination, ActionEvent event) {
@@ -92,6 +99,7 @@ public class AppointmentsMenu implements Initializable {
             appointment.setUserId(Connector.getUserId(consultantChoiceBox.getSelectionModel().getSelectedItem()));
             appointment.setType(typeField.getText());
             appointment.setStart(LocalDateTime.parse(time, formatter));
+            appointment.setEnd(LocalDateTime.parse(time, formatter).plusHours(duration.getValue()));
             Connector.updateAppointment(appointment);
         }
         else
@@ -100,7 +108,7 @@ public class AppointmentsMenu implements Initializable {
                     consultantChoiceBox.getValue(),
                     typeField.getText(),
                     time,
-                    "end");
+                    LocalDateTime.parse(time, formatter).plusHours(duration.getValue()).toString());
 
         loadScene("Dashboard.fxml", event);
     }

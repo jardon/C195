@@ -159,8 +159,8 @@ public class Connector {
                     "not needed",
                     type,
                     "not needed",
-                    LocalDateTime.now(),
-                    LocalDateTime.now(),
+                    start,
+                    end,
                     LocalDateTime.now(),
                     User.getUsername(),
                     User.getUsername()));
@@ -180,7 +180,7 @@ public class Connector {
                     appointment.getUserId(),
                     appointment.getType(),
                     appointment.getStart(),
-                    LocalDateTime.now(),
+                    appointment.getEnd(),
                     appointment.getIdAsInt()));
         }
         catch (Exception e) {
