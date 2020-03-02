@@ -93,7 +93,6 @@ public class AppointmentsMenu implements Initializable {
     public void saveAppointment(ActionEvent event) {
         String time = String.format("%s %s", datePicker.getValue(), timeChoiceBox.getValue());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        System.out.println(time);
         if(edited) {
             appointment.setCustomerId(customerTable.getSelectionModel().getSelectedItem().getIntId());
             appointment.setUserId(Connector.getUserId(consultantChoiceBox.getSelectionModel().getSelectedItem()));

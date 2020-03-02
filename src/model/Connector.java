@@ -2,8 +2,6 @@ package model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.DatePicker;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,6 +16,7 @@ public class Connector {
     static ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
     static ObservableList<String> cityList = FXCollections.observableArrayList();
     static ObservableList<String> userList = FXCollections.observableArrayList();
+    static int range = 30;
 
     public static void load() {
         try {
@@ -297,7 +296,7 @@ public class Connector {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
             appointmentsList.removeAll(appointmentsList);
-            ResultSet appointments = conn.createStatement().executeQuery(
+            ResultSet appointments = conn.createStatement().executeQuery(String.format(
                     "SELECT  \n" +
                     "customer.customerName,\n" +
                     "user.userName,\n" +
@@ -309,7 +308,11 @@ public class Connector {
                     "appointment.end\n" +
                     "FROM customer\n" +
                     "INNER JOIN appointment ON customer.customerId = appointment.customerId\n" +
-                    "INNER JOIN user ON user.userId = appointment.userId");
+                    "INNER JOIN user ON user.userId = appointment.userId\n" +
+                    "WHERE appointment.start between '%s' AND '%s'\n" +
+                    "ORDER BY appointment.start DESC",
+                    LocalDateTime.now(),
+                    LocalDateTime.now().plusDays(range)));
             while(appointments.next()) {
                 appointmentsList.add(new Appointment(appointments.getInt("appointmentId"),
                                 appointments.getString("customerName"),
@@ -330,4 +333,6 @@ public class Connector {
         refreshAppointmentList();
         return appointmentsList;
     }
+
+    public static void setRange(int newRange) { range = newRange; }
 }

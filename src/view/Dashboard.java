@@ -1,15 +1,16 @@
 package view;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -33,6 +34,8 @@ public class Dashboard implements Initializable {
     @FXML private TableColumn<Appointment, String> appointmentType;
     @FXML private TableColumn<Appointment, String> appointmentStart;
     @FXML private TableColumn<Appointment, String> appointmentEnd;
+    @FXML private ChoiceBox<String> range;
+    private ObservableList<String> rangeItems = FXCollections.observableArrayList();
 
     public void initialize(URL url, ResourceBundle rb) {
         customerId.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerId"));
@@ -47,6 +50,21 @@ public class Dashboard implements Initializable {
         appointmentStart.setCellValueFactory(new PropertyValueFactory<Appointment, String>("start"));
         appointmentEnd.setCellValueFactory(new PropertyValueFactory<Appointment, String>("end"));
         appointmentsTable.setItems(Connector.getAppointmentList());
+
+        rangeItems.add("30");
+        rangeItems.add("7");
+        range.setItems(rangeItems);
+        range.setValue("30");
+        range.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if(range.getValue().equals("30"))
+                    Connector.setRange(7);
+                else
+                    Connector.setRange(30);
+                Connector.refreshAppointmentList();
+            }
+        });
     }
 
     private void loadScene(String destination, ActionEvent event) {
