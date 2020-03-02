@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 
 public class Connector {
@@ -293,6 +294,7 @@ public class Connector {
     }
 
     public static void refreshAppointmentList() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
             appointmentsList.removeAll(appointmentsList);
             ResultSet appointments = conn.createStatement().executeQuery(
@@ -315,8 +317,8 @@ public class Connector {
                                 appointments.getString("userName"),
                                 appointments.getInt("userId"),
                                 appointments.getString("type"),
-                                appointments.getString("start"),
-                                appointments.getString("end")));
+                                LocalDateTime.parse(appointments.getString("start"), formatter),
+                                LocalDateTime.parse(appointments.getString("end"), formatter)));
             }
         }
         catch(Exception e) {

@@ -17,6 +17,7 @@ import model.Connector;
 import model.Customer;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -81,12 +82,13 @@ public class AppointmentsMenu implements Initializable {
 
     public void saveAppointment(ActionEvent event) {
         String time = String.format("%s %s", datePicker.getValue(), timeChoiceBox.getValue());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         System.out.println(time);
         if(edited) {
             appointment.setCustomerId(customerTable.getSelectionModel().getSelectedItem().getIntId());
             appointment.setUserId(Connector.getUserId(consultantChoiceBox.getSelectionModel().getSelectedItem()));
             appointment.setType(typeField.getText());
-            appointment.setStart(time);
+            appointment.setStart(LocalDateTime.parse(time, formatter));
             Connector.updateAppointment(appointment);
         }
         else
