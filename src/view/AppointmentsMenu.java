@@ -48,6 +48,9 @@ public class AppointmentsMenu implements Initializable {
             else
                 time = Integer.toString(i);
             timeSlots.add(time + ":00:00");
+            timeSlots.add(time + ":15:00");
+            timeSlots.add(time + ":30:00");
+            timeSlots.add(time + ":45:00");
         }
         timeChoiceBox.setItems(timeSlots);
     }
