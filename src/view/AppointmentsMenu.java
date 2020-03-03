@@ -16,10 +16,7 @@ import model.Appointment;
 import model.Connector;
 import model.Customer;
 import java.net.URL;
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -71,14 +68,17 @@ public class AppointmentsMenu implements Initializable {
 
     public void initData(Appointment appointment) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime start = appointment.getStart().atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime end = appointment.getEnd().atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
         edited = true;
         typeField.setText(appointment.getType());
         consultantChoiceBox.setValue(appointment.getUserName());
         this.appointment = appointment;
         customerTable.getSelectionModel().select(Connector.getCustomer(appointment.getCustomerId()));
         duration.getValueFactory().setValue(Duration.between(appointment.getStart(), appointment.getEnd()).toHoursPart());
-        timeChoiceBox.setValue(appointment.getStartAsString().substring(11) + ":00");
-        datePicker.setValue(LocalDate.parse(appointment.getStartAsString().substring(0,10), formatter));
+        timeChoiceBox.setValue(start.toString().substring(11) + ":00");
+//        datePicker.setValue(LocalDate.parse(appointment.getStartAsString().substring(0,10), formatter));
+        datePicker.setValue(LocalDate.parse(end.toString().substring(0,10), formatter));
     }
 
     private void loadScene(String destination, ActionEvent event) {
@@ -103,12 +103,13 @@ public class AppointmentsMenu implements Initializable {
     public void saveAppointment(ActionEvent event) {
         String time = String.format("%s %s", datePicker.getValue(), timeChoiceBox.getValue());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime start = LocalDateTime.parse(time, formatter).atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
         if(edited) {
             appointment.setCustomerId(customerTable.getSelectionModel().getSelectedItem().getIntId());
             appointment.setUserId(Connector.getUserId(consultantChoiceBox.getSelectionModel().getSelectedItem()));
             appointment.setType(typeField.getText());
-            appointment.setStart(LocalDateTime.parse(time, formatter));
-            appointment.setEnd(LocalDateTime.parse(time, formatter).plusHours(duration.getValue()));
+            appointment.setStart(start);
+            appointment.setEnd(start.plusHours(duration.getValue()));
             Connector.updateAppointment(appointment);
         }
         else
@@ -116,8 +117,8 @@ public class AppointmentsMenu implements Initializable {
                     customerTable.getSelectionModel().getSelectedItem().getCustomerId(),
                     consultantChoiceBox.getValue(),
                     typeField.getText(),
-                    time,
-                    LocalDateTime.parse(time, formatter).plusHours(duration.getValue()).toString());
+                    start.toString(),
+                    start.plusHours(duration.getValue()).toString());
 
         loadScene("Dashboard.fxml", event);
     }
