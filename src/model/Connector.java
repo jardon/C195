@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 
@@ -311,9 +312,9 @@ public class Connector {
                     "INNER JOIN appointment ON customer.customerId = appointment.customerId\n" +
                     "INNER JOIN user ON user.userId = appointment.userId\n" +
                     "WHERE appointment.start between '%s' AND '%s'\n" +
-                    "ORDER BY appointment.start DESC",
-                    LocalDateTime.now(),
-                    LocalDateTime.now().plusDays(range)));
+                    "ORDER BY appointment.start ASC",
+                    LocalDateTime.now(ZoneId.of("UTC")),
+                    LocalDateTime.now(ZoneId.of("UTC")).plusDays(range)));
             while(appointments.next()) {
                 appointmentsList.add(new Appointment(appointments.getInt("appointmentId"),
                                 appointments.getString("customerName"),
@@ -347,8 +348,8 @@ public class Connector {
                     "INNER JOIN user ON user.userId = appointment.userId\n" +
                     "WHERE appointment.userId = %s AND appointment.start between '%s' AND '%s'",
                     User.getUserId(),
-                    LocalDateTime.now(),
-                    LocalDateTime.now().plusMinutes(15)));
+                    LocalDateTime.now(ZoneId.of("UTC")),
+                    LocalDateTime.now(ZoneId.of("UTC")).plusMinutes(15)));
             appointments.next();
             appointments.getString("customerName");
             return true;
